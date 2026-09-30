@@ -1,7 +1,8 @@
 {
   "name": "Mad Rat Pep Tracker",
   "short_name": "Pep Tracker",
-  "start_url": "/?v=19",
+  "start_url": "./?v=19",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#0c0c0f",
   "theme_color": "#0c0c0f",
