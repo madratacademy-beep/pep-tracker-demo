@@ -1,0 +1,16 @@
+{
+  "name": "Mad Rat Pep Tracker",
+  "short_name": "Pep Tracker",
+  "start_url": "/?v=19",
+  "display": "standalone",
+  "background_color": "#0c0c0f",
+  "theme_color": "#0c0c0f",
+  "icons": [
+    {
+      "src": "assets/apple-touch-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>Pep Tracker</title>
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Pep Tracker" />
+  <meta name="theme-color" content="#0c0c0f" />
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css?v=19" />
+</head>
+<body>
+  <div class="stage">
+    <div class="phone" id="app">
+      <!-- Status bar mimic -->
+      <div class="status-bar">
+        <span class="time" id="status-time">9:41</span>
+        <span class="status-icons" aria-hidden="true">
+          <svg width="17" height="11" viewBox="0 0 17 11"><rect x="0" y="3" width="3" height="8" rx="0.5" fill="currentColor" opacity=".4"/><rect x="4.5" y="2" width="3" height="9" rx="0.5" fill="currentColor" opacity=".6"/><rect x="9" y="0.5" width="3" height="10.5" rx="0.5" fill="currentColor" opacity=".8"/><rect x="13.5" y="0" width="3" height="11" rx="0.5" fill="currentColor"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 3.5c1.8 0 3.4.7 4.6 1.8l1.2-1.2A8.1 8.1 0 008 1.5 8.1 8.1 0 002.2 4.1l1.2 1.2A6.5 6.5 0 018 3.5zm0 3c1 0 1.9.4 2.6 1l1.2-1.2A5 5 0 008 5a5 5 0 00-3.8 1.8L5.4 8A3.5 3.5 0 018 6.5zm0 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" fill="currentColor"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0.5" y="0.5" width="21" height="11" rx="2.5" stroke="currentColor" fill="none" opacity=".35"/><rect x="2" y="2" width="14" height="8" rx="1.5" fill="currentColor"/><path d="M23 4v4a2 2 0 000-4z" fill="currentColor" opacity=".4"/></svg>
+        </span>
+      </div>
+
+      <header class="app-header">
+        <div class="brand">
+          <img class="brand-mark" src="assets/mad-rat-mark.png" width="44" height="44" alt="Mad Rat Pep Tracker" />
+          <div class="brand-title">
+            <span class="brand-line1">Mad Rat</span>
+            <h1>Pep Tracker</h1>
+          </div>
+          <nav class="brand-links" aria-label="Mad Rat links">
+            <a class="brand-link" href="https://madratacademy.com" target="_blank" rel="noopener noreferrer">madratacademy.com</a>
+            <a class="brand-link" href="https://www.skool.com/madrat-peptides" target="_blank" rel="noopener noreferrer">Skool.com/madrat-peptides</a>
+          </nav>
+        </div>
+      </header>
+
+      <main class="screens">
+        <!-- TODAY -->
+        <section class="screen active" id="screen-today" data-tab="today">
+          <div class="screen-title-row">
+            <h2>Today</h2>
+            <span class="date-chip" id="today-date"></span>
+          </div>
+          <p class="hint" id="today-summary"></p>
+          <div class="card-list" id="today-list"></div>
+          <p class="empty" id="today-empty" hidden>Nothing due today. Nice.</p>
+
+          <details class="about-disclaimer">
+            <summary>About &amp; disclaimer</summary>
+            <p>Pep Tracker is a personal tracking tool only. It is not a medical device and does not provide medical advice. It is not a substitute for consulting a qualified healthcare professional. Discuss peptide dosing and cycle information with a doctor before use. Pep Tracker does not diagnose, treat, cure, or prevent any medical condition.</p>
+          </details>
+        </section>
+
+        <!-- PEPTIDES -->
+        <section class="screen" id="screen-peptides" data-tab="peptides">
+          <div class="screen-title-row">
+            <h2>Peptides</h2>
+            <button type="button" class="btn-add" id="btn-add-peptide">Add peptide</button>
+          </div>
+          <p class="hint">Add your own peptides. Tap a card for live mg → units calc.</p>
+
+          <div class="card add-form" id="add-peptide-form" hidden>
+            <h3>New peptide</h3>
+            <label class="field-label" for="new-name">Name (required)</label>
+            <div class="name-typeahead">
+              <input type="text" id="new-name" class="field-input" placeholder="Custom name" autocomplete="off" spellcheck="false" />
+              <ul class="name-suggestions" id="name-suggestions" hidden role="listbox"></ul>
+            </div>
+
+            <div class="calc-row" style="margin-top:10px">
+              <div>
+                <label class="field-label" for="new-dose">Dose (mg)</label>
+                <input type="number" id="new-dose" class="field-input" step="0.01" min="0" inputmode="decimal" value="0.25" />
+              </div>
+              <div>
+                <label class="field-label" for="new-bac">BAC water (mL)</label>
+                <input type="number" id="new-bac" class="field-input" step="0.1" min="0.01" inputmode="decimal" value="2" />
+              </div>
+            </div>
+            <div class="calc-row" style="margin-top:10px">
+              <div>
+                <label class="field-label" for="new-vial">Vial size (mg)</label>
+                <input type="number" id="new-vial" class="field-input" step="0.1" min="0.01" inputmode="decimal" value="10" />
+              </div>
+              <div>
+                <label class="field-label">Conc (auto)</label>
+                <p class="field-input" id="new-conc-display" style="margin:0;display:flex;align-items:center">5 mg/mL</p>
+              </div>
+            </div>
+
+            <p class="add-units-preview">≈ <strong id="new-units-preview">5</strong> units (U-100)</p>
+
+            <label class="field-label" for="new-freq">Frequency note (optional)</label>
+            <input type="text" id="new-freq" class="field-input" placeholder="e.g. Daily · morning" />
+
+            <p class="field-label" style="margin-top:10px">Days of week</p>
+            <div class="days-row" id="new-days">
+              <label class="day-chip"><input type="checkbox" class="day-toggle" value="0" checked /> Sun</label>
+              <label class="day-chip"><input type="checkbox" class="day-toggle" value="1" checked /> Mon</label>
+              <label class="day-chip"><input type="checkbox" class="day-toggle" value="2" checked /> Tue</label>
+              <label class="day-chip"><input type="checkbox" class="day-toggle" value="3" checked /> Wed</label>
+              <label class="day-chip"><input type="checkbox" class="day-toggle" value="4" checked /> Thu</label>
+              <label class="day-chip"><input type="checkbox" class="day-toggle" value="5" checked /> Fri</label>
+              <label class="day-chip"><input type="checkbox" class="day-toggle" value="6" checked /> Sat</label>
+            </div>
+
+            <p class="field-label" style="margin-top:14px">Cycles</p>
+            <div class="cycle-row">
+              <div class="cycle-pair">
+                <label class="field-label" for="new-cycle-on">Cycles On</label>
+                <div class="cycle-inputs">
+                  <input type="number" id="new-cycle-on" class="field-input" min="0" step="1" inputmode="numeric" value="0" />
+                  <select id="new-cycle-on-unit" class="field-input cycle-unit">
+                    <option value="days">Days</option>
+                    <option value="weeks" selected>Weeks</option>
+                  </select>
+                </div>
+              </div>
+              <div class="cycle-pair">
+                <label class="field-label" for="new-cycle-off">Cycles Off</label>
+                <div class="cycle-inputs">
+                  <input type="number" id="new-cycle-off" class="field-input" min="0" step="1" inputmode="numeric" value="0" />
+                  <select id="new-cycle-off-unit" class="field-input cycle-unit">
+                    <option value="days">Days</option>
+                    <option value="weeks" selected>Weeks</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <label class="field-label" for="new-cycle-start" style="margin-top:10px">Cycle Start</label>
+            <input type="date" id="new-cycle-start" class="field-input" />
+            <p class="muted" style="font-size:12px;margin-top:6px">Example: 10 days on / 10 days off. Leave On at 0 for no cycle.</p>
+
+            <button type="button" class="btn-save" id="btn-save-peptide">Save peptide</button>
+          </div>
+
+          <div class="card-list" id="peptides-list"></div>
+          <p class="empty" id="peptides-empty">No peptides yet — tap Add peptide.</p>
+        </section>
+
+        <!-- WEEK -->
+        <section class="screen" id="screen-week" data-tab="week">
+          <div class="screen-title-row">
+            <h2>Week</h2>
+          </div>
+          <p class="hint">Tap a day for doses due that day.</p>
+          <div class="week-strip" id="week-strip"></div>
+          <div class="week-detail card" id="week-detail">
+            <h3 id="week-detail-title">Select a day</h3>
+            <div id="week-detail-list"></div>
+          </div>
+        </section>
+
+        <!-- REMINDERS -->
+        <section class="screen" id="screen-reminders" data-tab="reminders">
+          <div class="screen-title-row">
+            <h2>Reminders</h2>
+          </div>
+          <div class="card settings-card">
+            <div class="setting-row">
+              <div>
+                <strong>Daily reminder</strong>
+                <p class="muted">Visual preference only — no push in this sample</p>
+              </div>
+              <label class="toggle">
+                <input type="checkbox" id="reminder-enabled" />
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+            <div class="setting-row">
+              <strong>Time</strong>
+              <input type="time" id="reminder-time" value="08:00" />
+            </div>
+            <p class="saved-note" id="reminder-saved" hidden>Saved to this device</p>
+          </div>
+          <div class="card preview-card" id="reminder-preview">
+            <span class="preview-icon">🔔</span>
+            <div>
+              <strong>Pep Tracker</strong>
+              <p>Morning doses are ready to log.</p>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="disclaimer">Pep Tracker · personal tracker only · not medical advice</footer>
+
+      <nav class="tab-bar" role="tablist">
+        <button type="button" class="tab active" data-tab="today" aria-selected="true">
+          <span class="tab-icon">☀️</span>
+          <span>Today</span>
+        </button>
+        <button type="button" class="tab" data-tab="peptides" aria-selected="false">
+          <span class="tab-icon">💉</span>
+          <span>Peptides</span>
+        </button>
+        <button type="button" class="tab" data-tab="week" aria-selected="false">
+          <span class="tab-icon">📅</span>
+          <span>Week</span>
+        </button>
+        <button type="button" class="tab" data-tab="reminders" aria-selected="false">
+          <span class="tab-icon">⏰</span>
+          <span>Reminders</span>
+        </button>
+      </nav>
+    </div>
+    <p class="stage-caption">Pep Tracker · sample demo</p>
+  </div>
+  <script src="app.js?v=19"></script>
+</body>
+</html>
